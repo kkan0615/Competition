@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ./layout %>
+</head>
+<body>
+    <% include ./top-nav %>
+    <div class="content">
+        <a href="/login">login</a>
+        <a href="/join">join</a>
+        <% if(user && user.id) { %>
+            <p><%= user.nickname %></p>
+        <% } %>
+    </div>
+</body>
+</html>
