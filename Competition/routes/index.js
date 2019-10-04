@@ -4,7 +4,7 @@
  * list of API:
  *              Express
  *              isNotLoggedIn
- * Last Update: 9/29/2019
+ * Last Update: 10/02/2019
  * Version: 1.0
 *****************************************************************************************************/
 const express = require('express');

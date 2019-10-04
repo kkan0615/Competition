@@ -1,5 +1,7 @@
 /****************************************************************************************************
  * Authour: Youngjin Kwak(곽영진)
+ * Table name: user
+ * Purpose: User database
  * Element:
  *          email
  *          nickname - User's nickaname
