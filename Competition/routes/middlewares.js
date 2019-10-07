@@ -13,3 +13,11 @@ exports.isNotLoggedIn = (req, res, next) => {
         res.redirect('/');
     }
 };
+
+exports.isAdmin = (req, res, next) => {
+    if(req.isAuthenticated() && req.user.isAdmin == true) {
+        next();
+    } else {
+        res.status(404).send('Only admin is allowed to access');
+    }
+};

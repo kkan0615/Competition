@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../layout %>
+</head>
+<body>
+    <% include ../top-nav %>
+    <div class="content">
+        <% if(tags) { %>
+            <% tags.forEach(tag => { %>
+                <div class="tag">
+                    <h3><%= tag.title %></h3>
+                </div>
+            <% }); %>
+        <% } %>
+        <button class="create-Buttons"><a href="/tag/newTag">Create tag</a></button>
+    </div>
+    <style>
+        .content {
+            margin: 20px;
+        }
+
+        .create-Buttons {
+            background-color: #AE85FF;
+            border: none;
+            border-radius: 20px;
+        }
+        .create-Buttons a {
+            font-size: 20px;
+            color: white;
+            padding: 30px 10px 30px 10px;
+            text-decoration: none;
+        }
+    </style>
+</body>
+</html>

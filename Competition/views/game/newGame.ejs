@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../layout %>
+</head>
+<body>
+    <% include ../top-nav %>
+    <div class="content">
+        <form method="POST" class="newGame-form">
+            <h1>New Games</h1>
+            <label for="title">Title</label>
+            <input type="text" name="title"><br>
+            <label for="description">Description</label>
+            <input type="text" name="description"><br>
+            <label for="rule">rule</label>
+            <input type="text" name="rule"><br>
+            <label for="option">option</label>
+            <input type="text" name="option"><br>
+            <label for="optionTwo">optionTwo</label>
+            <input type="text" name="optionTwo"><br>
+            <label for="max">max</label>
+            <input type="number" name="max"><br>
+            <label for="timeToDate">timeToDate</label>
+            <input type="date" name="timeToDate"><br>
+            <label for="participateDate">participateDate</label>
+            <input type="date" name="participateDate"><br>
+            <button type="submit">submit</button>
+            <button type="reset">rest</button>
+        </form>
+    </div>
+    <style>
+        .newGame-form {
+            margin-top: 5px;
+            margin-bottom: 50px;
+            width: 400px;
+            background: white;
+            font-size: 20px;
+            height: 560px;
+            padding: 40px 20px;
+            position: absolute;
+            border-radius: 15px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .newGame-form h1 {
+            text-align: center;
+            font-size: 30px;
+        }
+.signup-form {
+    font-family: "Times New Roman";
+    margin-top: 15px;
+    margin-bottom: 50px;
+    width: 400px;
+    background: #f1f1f1;
+    font-size: 20px;
+    height: 560px;
+    padding: 40px 20px;
+    position: absolute;
+    border-radius: 15px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.signup-form h1 {
+    text-align: center;
+}
+.signup-form label {
+    text-align: left;
+    margin-top: 30px;
+}
+.signup-form input[type=email] {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    border: none;
+    background: none;
+    outline: none;
+    width: 100%;
+    height: 40px;
+    border-bottom: 1px solid black;
+}
+.signup-form input[type=password] {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    border: none;
+    background: none;
+    outline: none;
+    width: 100%;
+    height: 40px;
+    border-bottom: 1px solid black;
+}
+.signup-form input[type=text] {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    border: none;
+    background: none;
+    outline: none;
+    width: 100%;
+    height: 40px;
+    border-bottom: 1px solid black;
+}
+.signup-form button {
+    margin-top: 30px;
+    margin-bottom: 100px;
+    border: none;
+    background-image: linear-gradient(120deg, #3498db, #8e448e);
+    outline: none;
+    cursor: pointer;
+    transition: 5s;
+    text-align: center;
+    color: #fff;
+    width: 100%;
+    height: 40px;
+}
+    </style>
+    <script>
+        document.getElementsByName("timeToDate").values = new Date();
+        document.getElementsByName("participateDate").values = new Date();
+    </script>
+</body>
+</html>

@@ -12,6 +12,8 @@ require('dotenv').config();
 /* List of Router */
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const gameRouter = require('./routes/game');
+const tagRouter = require('./routes/tag');
 
 const app = express();
 sequelize.sync();
@@ -35,14 +37,16 @@ const sessionMiddleware = session({
     },
 });
 app.set('port', process.env.PORT || 8001);
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'))); // Most of css, js files will be in public directory.
 app.use(sessionMiddleware);
 app.use(flash());
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session()); // Set passport to session.
 
-app.use('/', indexRouter);
-app.use('/auth', authRouter);
+app.use('/', indexRouter); // Index page router
+app.use('/auth', authRouter); // Auth page router
+app.use('/game', gameRouter); // Game page router
+app.use('/tag', tagRouter); // Tag page router
 
 const server = app.listen(app.get('port'), () => {
     console.log(app.get('port'), 'is wating you!');

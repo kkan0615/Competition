@@ -1,41 +1,78 @@
-/*
-https://color.adobe.com/ko/search?q=black
-*/
-/* Color Theme Swatches in Hex */
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-1-hex { color: #F2F2F2; }
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-2-hex { color: #A6A6A6; }
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-3-hex { color: #737373; }
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-4-hex { color: #404040; }
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-5-hex { color: #262626; }
-
-/* Color Theme Swatches in RGBA */
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-1-rgba { color: rgba(242, 242, 242, 1); }
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-2-rgba { color: rgba(165, 165, 165, 1); }
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-3-rgba { color: rgba(114, 114, 114, 1); }
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-4-rgba { color: rgba(63, 63, 63, 1); }
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-5-rgba { color: rgba(38, 38, 38, 1); }
-
-/* Color Theme Swatches in HSLA */
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-1-hsla { color: hsla(0, 0, 95, 1); }
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-2-hsla { color: hsla(0, 0, 65, 1); }
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-3-hsla { color: hsla(0, 0, 45, 1); }
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-4-hsla { color: hsla(0, 0, 25, 1); }
-.Panorama-dark-grey-black-slate-background-or-texture.Panorama-black-slate-background-5-hsla { color: hsla(0, 0, 15, 1); }
 body {
     font-family: Arial;
+    padding: 0px 200px 0px 200px;
+    margin: 0;
+    background: #F2F2F2;
+}
+
+.topnav {
+    overflow: hidden;
+    background-color: #AE85FF;
+    padding: 0 10px 0px 10px;
+  }
+
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.topnav a:hover {
+    background-color: #91A7FF;
+    color: #f2f2f2;
+    transition-duration: .15s;
+    border-bottom: black 4px solid;
+}
+
+.topnav-right {
+    float: right;
+}
+
+.dropdown {
+    float: left;
+    overflow: hidden;
+}
+
+.dropdown .dropbtn {
+    font-size: 20px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
     margin: 0;
 }
 
-.content {
-    padding: 30px;
-    color: white;
-    background: black;
+.navbar a:hover, .dropdown:hover .dropbtn {
+    background-color: #91A7FF;
 }
 
-.content a {
-    color: white;
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #8079E8;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
 }
 
-.content a:visited {
+.dropdown-content a {
+    float: none;
+    color: white;
+    padding: 12px 16px;
     text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #8079E8;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }
