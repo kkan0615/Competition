@@ -3,8 +3,9 @@
         <a href="/">Home</a>
         <a href="/game">Test Of game list</a>
         <a href="/tag">Test Of tag</a>
-    </div>
+    </div> <!-- topnav-left end -->
     <div class="topnav-right">
+        <!-- If user is logged in -->
         <% if(user && user.id) { %>
         <div class="dropdown">
             <button class="dropbtn">
@@ -14,8 +15,9 @@
                 <a href="#">Profile</a>
                 <a href="/auth/logout">Logout</a>
                 <a href="#">Link 3</a>
-            </div>
-        </div>
+            </div> <!-- drowdonw-content end -->
+        </div> <!-- drowdown end -->
+        <!-- If user is not logged in -->
         <% } else { %>
             <div class="dropdown">
                 <button class="dropbtn">
@@ -24,8 +26,8 @@
                 <div class="dropdown-content">
                     <a href="/login">login</a>
                     <a href="/join">join</a>
-                </div>
-            </div>
+                </div> <!-- drowdonw-content end -->
+            </div> <!-- drowdown end -->
         <% } %>
-    </div>
-</div>
+    </div> <!-- topnav-right end -->
+</div> <!-- topnav end -->

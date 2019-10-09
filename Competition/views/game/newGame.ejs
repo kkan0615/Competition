@@ -6,7 +6,7 @@
 <body>
     <% include ../top-nav %>
     <div class="content">
-        <form method="POST" class="newGame-form">
+        <form method="POST" class="newGame-form" enctype="multipart/form-data">
             <h1>New Games</h1>
             <label for="title">Title</label>
             <input type="text" name="title"><br>
@@ -24,6 +24,12 @@
             <input type="date" name="timeToDate"><br>
             <label for="participateDate">participateDate</label>
             <input type="date" name="participateDate"><br>
+            <select name="tag" id="">
+                <% tags.forEach(tag => { %>
+                    <option value="<%= tag.id %>"><%= tag.title %></option>
+                <% }); %>
+            </select>
+            <input type="file" id="img" name="img">
             <button type="submit">submit</button>
             <button type="reset">rest</button>
         </form>

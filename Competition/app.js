@@ -44,6 +44,7 @@ app.use(passport.initialize());
 app.use(passport.session()); // Set passport to session.
 
 app.use('/', indexRouter); // Index page router
+app.use('/uploads', express.static('uploads'));
 app.use('/auth', authRouter); // Auth page router
 app.use('/game', gameRouter); // Game page router
 app.use('/tag', tagRouter); // Tag page router

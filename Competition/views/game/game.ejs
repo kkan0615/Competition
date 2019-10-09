@@ -6,8 +6,11 @@
 <body>
     <% include ../top-nav %>
     <div class="content">
-        <%= game.id %>
-        <%= game.title %>
+        <div class="infomation">
+            <img src="/uploads/game/<%= game.img %>" alt="">
+            <h1><%= game.title %></h1>
+            <p class="info-description"><%= game.description %></p>
+        </div>
     </div>
 </body>
 </html>

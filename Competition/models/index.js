@@ -25,6 +25,8 @@ db.User.hasMany(db.Participant);
 db.Participant.belongsTo(db.User);
 
 /* Game N:M Tag */
+db.Game.belongsToMany(db.Tag, {through: 'gameTag'});
+db.Tag.belongsToMany(db.Game, {through: 'gameTag'});
 
 /* Game 1:N Tournament */
 db.Game.hasMany(db.Tournament);

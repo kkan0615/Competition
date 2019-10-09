@@ -7,6 +7,9 @@
     <% include ../top-nav %>
 
     <div class="content">
+        <div class= "result">
+            <p><strong>Result count: <%= games.length %></strong></p>
+        </div>
         <div class="row">
                 <% if(games) { %>
                     <% games.forEach(game => { %>
@@ -39,6 +42,12 @@
             color: white;
             padding: 30px 10px 30px 10px;
             text-decoration: none;
+        }
+
+        .result {
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: white;
         }
     </style>
 </body>
