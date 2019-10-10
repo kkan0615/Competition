@@ -7,14 +7,21 @@
     <% console.log(tags) %>
     <% include ../top-nav %>
     <div class="content">
-        <% if(tags) { %>
-            <% tags.forEach(tag => { %>
-                <div class="tag">
-                    <img src="/uploads/tag/<%= tag.img %>" alt="">
-                    <h3><%= tag.title %></h3>
-                </div>
-            <% }); %>
-        <% } %>
+        <div class="search-bar">
+            <input type="text" name="search" id="search">
+        </div>
+        <div class="row">
+                <% if(tags) { %>
+                    <% tags.forEach(tag => { %>
+                        <div class="column">
+                            <div class="card">
+                                <img src="/uploads/tag/<%= tag.img %>" alt="">
+                                <h3><%= tag.title %></h3>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } %>
+        </div>
         <button class="create-Buttons"><a href="/tag/newTag">Create tag</a></button>
     </div>
     <style>

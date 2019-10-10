@@ -8,9 +8,41 @@
     <div class="content">
         <div class="infomation">
             <img src="/uploads/game/<%= game.img %>" alt="">
-            <h1><%= game.title %></h1>
-            <p class="info-description"><%= game.description %></p>
+            <div class="info-writeBox">
+                <h1><%= game.title %></h1>
+                <p class="info-description"><%= game.description %></p>
+                <button><a href="/game/<%= game.id %>/participate">참가하기</a></button>
+            </div>
+        </div>
+        <div class="menu">
+            <a href="/game/<%= game.id %>">Main</a>
+            <a href="/game/<%= game.id%>/pList">List</a>
         </div>
     </div>
+    <style>
+        .menu {
+            overflow: hidden;
+            background-color: #AE85FF;
+            padding: 0 10px 0px 10px;
+            border-radius: 20px;
+        }
+
+        .menu a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .menu a:hover {
+            background-color: #91A7FF;
+            color: #f2f2f2;
+            border-bottom: black 4px solid;
+        }
+    </style>
+    <script>
+    </script>
 </body>
 </html>

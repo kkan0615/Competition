@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../layout %>
+</head>
+<body>
+    <% console.log(game.participants[0]) %>
+    <% include ../top-nav %>
+    <div class="content">
+        <div class="menu">
+            <a href="/game/<%= game.id %>">Main</a>
+            <a href="/game/<%= game.id %>/list">List</a>
+        </div>
+        <div class="row">
+                <% if(game.participants) { %>
+                    <% game.participants.forEach(participant => { %>
+                        <div class="column">
+                            <div class="card">
+                                <img src="/uploads/user/<%= %>" alt="">
+                                <%= participant.user.nickname %>
+                                <% if(user && user.id ) { %>
+                                    <button>삭제</button>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } %>
+        </div>
+    </div>
+    <style>
+        .menu {
+            margin: 20px 0px 20px 0px;
+            overflow: hidden;
+            background-color: #AE85FF;
+            padding: 0 10px 0px 10px;
+            border-radius: 20px;
+        }
+
+        .menu a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .menu a:hover {
+            background-color: #91A7FF;
+            color: #f2f2f2;
+            border-bottom: black 4px solid;
+        }
+        /* Float four columns side by side */
+        .column {
+            float: left;
+            width: 23.2%;
+            padding: 0 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Remove extra left and right margins, due to padding */
+        .row {
+            margin: 0 -5px;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Style the counter cards */
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            text-align: center;
+            background-color: white;
+            font-size: 20px;
+        }
+
+        .card img {
+            float: left;
+            border-radius: 20px;
+            width: 70px;
+            height: 70px;
+        }
+
+        .card a {
+            text-decoration: none;
+        }
+
+        .card a:hover {
+            color: gray;
+        }
+
+        .card button {
+            float: right;
+        }
+    </style>
+    <script>
+    </script>
+</body>
+</html>

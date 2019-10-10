@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../layout %>
+</head>
+<body>
+    <% include ../top-nav %>
+    <div class="content">
+        <div class="createForm">
+            <form method="POST" class="newGame-form" enctype="multipart/form-data">
+                <h1>New Games</h1>
+                <label for="option"><%= game.option %></label>
+                <input type="text" name="option"><br>
+                <label for="optionTwo"><%= game.optionTwo %></label>
+                <input type="text" name="optionTwo"><br>
+                <button type="submit">submit</button>
+                <button type="reset">rest</button>
+            </form>
+        </div>
+    </div>
+    <style>
+        .createForm {
+            padding: 20px;
+            margin: 20px 0 0 0;
+            background-color: white;
+        }
+    </style>
+</body>
+</html>

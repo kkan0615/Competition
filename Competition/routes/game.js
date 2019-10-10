@@ -17,7 +17,7 @@ const fs = require('fs'); // File System
 const path = require('path') //Path System
 
 const { isLoggedIn } = require('./middlewares');
-const { Game, Tag } = require('../models/index');
+const { Game, Tag, Participant, User } = require('../models/index');
 
 /****************************************************************************************************
  * Authour: Youngjin Kwak(곽영진)
@@ -149,12 +149,12 @@ router.post('/newGame', isLoggedIn, upload.single('img'), async(req, res, next) 
 /****************************************************************************************************
  * Authour: Youngjin Kwak(곽영진)
  * RESTful API: GET
- * Middlewares: isLoggedIn
+ * Middlewares:
  * Purpose: Create new Game
- * Last Update: 10/08/2019
+ * Last Update: 10/09/2019
  * Version: 1.0
 *****************************************************************************************************/
-router.get('/:id', isLoggedIn, async(req, res, next) => {
+router.get('/:id', async(req, res, next) => {
     try {
         //Find detail of game.
         const game = await Game.findOne({
@@ -177,4 +177,101 @@ router.get('/:id', isLoggedIn, async(req, res, next) => {
         next(error);
     }
 });
+
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
+ * RESTful API: GET
+ * Middlewares:
+ * Purpose: List of Participations
+ * Last Update: 10/09/2019
+ * Version: 1.0
+*****************************************************************************************************/
+router.get('/:id/pList', async(req, res, next) => {
+    try {
+        //Find detail of game.
+        const game = await Game.findOne({
+            include: [{
+                model: Participant,
+                include: {
+                    model: User,
+                }
+            }],
+            where: { id: req.params.id }
+        });
+
+        if(!game) {
+            req.flash('listError', 'There is no this game');
+            res.redirect('/game/');
+        }
+
+        return res.render('game/pList', {
+            title: game.title,
+            user: req.user,
+            plistError: req.flash('plistError'),
+            game,
+        });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
+ * RESTful API: GET
+ * Middlewares: isLoggedIn
+ * Purpose: Submit particiaption to game
+ * Last Update: 10/09/2019
+ * Version: 1.0
+*****************************************************************************************************/
+router.get('/:id/participate', isLoggedIn, async(req, res, next) => {
+    try {
+        const gameId = req.params.id;
+
+        const game = await Game.findOne({
+            where: { id: gameId }
+        });
+
+        return res.render('game/participate', {
+            title: 'Participate ' + game.title,
+            user: req.user,
+            partiError: req.flash('partiError'),
+            game,
+        })
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
+ * RESTful API: POST
+ * Middlewares: isLoggedIn
+ * Purpose: 참가자 Post로 받기
+ * Last Update: 10/09/2019
+ * Version: 1.0
+*****************************************************************************************************/
+router.post('/:id/participate', isLoggedIn, async(req, res, next) => {
+    try {
+        //Game Id from parameter
+        const gameId = req.params.id;
+        //Body properties
+        const { option, optionTwo } = req.body;
+        //Create new Participant
+        await Participant.create({
+            point: 0,
+            gameId,
+            userId: req.user.id,
+            option,
+            optionTwo,
+        });
+
+        return res.redirect('/game/' + gameId);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
 module.exports = router;

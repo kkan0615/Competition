@@ -80,8 +80,9 @@ body {
 /* Float four columns side by side */
 .column {
     float: left;
-    width: 25%;
+    width: 23.2%;
     padding: 0 10px;
+    margin-bottom: 20px;
 }
 
 /* Remove extra left and right margins, due to padding */
@@ -129,13 +130,13 @@ body {
 
 /*********************************************************************
 *   infomation 시작
+*   Author: Youngjin Kwak
 **********************************************************************/
 
 .infomation {
     height: 300px;
     padding: 10px;
-    margin: 10px 0px 0px 0px;
-    width: 98.7%;
+    margin: 20px 0px 20px 0px;
     background-color: white;
 }
 
@@ -153,6 +154,37 @@ body {
     height: 100%;
 }
 
+.infomation button {
+    float: right;
+    background-color: #AE85FF;
+    border: none;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.infomation button a {
+    text-decoration: none;
+    color: white;
+}
+
 .info-description {
     font-size: 30px;
+}
+
+.info-writeBox {
+    margin-right: 10px;
+}
+
+/*********************************************************************
+*   search-bar 시작
+*   Author: Youngjin Kwak
+**********************************************************************/
+.search-bar {
+    text-align: right;
+    margin: 0px 0px 30px 0px;
+}
+
+.search-bar input[type=text] {
+    width: 300px;
+    height: 30px;
 }

@@ -3,7 +3,7 @@
  * Table name: game,
  * Element:
  *          participantId - 1:N with user table
- *          Point - swith game Point!
+ *          Point - swith game Point! It's not big deal for tournament
  *
  * Last Update: 10/03/2019
  * Version: 1.0
