@@ -14,8 +14,8 @@
                             <div class="card">
                                 <a href="/game/<%= game.id %>"><img src="/uploads/game/<%= game.img %>" alt=""></a>
                                 <h3><a href="/game/<%= game.id %>"><%= game.title %></a></h3>
-                                <p>Some text</p>
-                                <p>Some text</p>
+                                <p>참가날짜: <%= game.participateDate %></p>
+                                <p>일정: <%= game.timeToDate %></p>
                             </div>
                         </div>
                     <% }); %>

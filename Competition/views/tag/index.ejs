@@ -9,6 +9,7 @@
     <div class="content">
         <div class="search-bar">
             <input type="text" name="search" id="search">
+            <button onclick="moveToSearch()">Search</button>
         </div>
         <div class="row">
                 <% if(tags) { %>
@@ -41,5 +42,15 @@
             text-decoration: none;
         }
     </style>
+
+    <script>
+        function moveToSearch() {
+            var text = document.getElementById("search").value;
+            console.log(text);
+            console.log("hello");
+
+            location.href = "/tag/search/" + text;
+        }
+    </script>
 </body>
 </html>

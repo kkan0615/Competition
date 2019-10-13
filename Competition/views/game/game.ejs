@@ -18,6 +18,30 @@
             <a href="/game/<%= game.id %>">Main</a>
             <a href="/game/<%= game.id%>/pList">List</a>
         </div>
+        <div class="grid-container">
+            <div class="grid-item item1">
+                1
+                <div class="newInfo">
+                    <!-- Foreach 후에 div 넣기 -->
+                </div>
+            </div>
+            <div class="grid-item item2">
+                <div class="chat-room">
+                    <fieldset>
+                        <div class="chat-list">
+
+                        </div>
+                    </fieldset>
+                    <form class="chat-form" method="POST" action="">
+                        <input type="text" name="chat">
+                        <button type="submit">submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="grid-item item3">
+                3
+            </div>
+        </div>
     </div>
     <style>
         .menu {
@@ -40,6 +64,85 @@
             background-color: #91A7FF;
             color: #f2f2f2;
             border-bottom: black 4px solid;
+        }
+
+        .grid-container {
+            margin-top: 20px;
+            display: grid;
+            grid-gap: 15px;
+            background-color: white;
+            padding: 10px;
+        }
+
+        .grid-item {
+            background-color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 20px;
+            font-size: 30px;
+        }
+
+        .item1 {
+            border: black 2px solid;
+            grid-column: 1 / span 2;
+            grid-row: 1 / 25;
+        }
+
+        .item2 {
+            border: black 2px solid;
+            grid-column: 3;
+            grid-row: 1 / 50;
+        }
+
+        .item3 {
+            border: black 2px solid;
+            grid-column: 1 / span 2 ;
+            grid-row: 25 / 50;
+        }
+
+        .newInfo {
+            background-color: white;
+            height: 80%;
+            margin: 10px;
+            padding: 10px;
+        }
+
+        .chat-room {
+
+        }
+
+        .chat-list {
+            height: 700px;
+            overflow: auto;
+            padding: 5px;
+        }
+
+        .chat-form {
+            height: 50px;
+            text-align: right;
+        }
+
+        .chat-form input {
+            margin-top: 10px;
+            width: 80%;
+            height: 50px;
+        }
+
+        .mine { text-align: right; }
+        .system { text-align: center; }
+        .mine img, .other img {
+            max-width: 300px;
+            display: inline-block;
+            border: 1px solid silver;
+            border-radius: 5px;
+            padding: 2px 5px;
+        }
+        .mine div:first-child, .other div:first-child { font-size: 12px; }
+        .mine div:last-child, .other div:last-child {
+            display: inline-block;
+            border: 1px solid silver;
+            border-radius: 5px;
+            padding: 2px 5px;
+            max-width: 300px;
         }
     </style>
     <script>

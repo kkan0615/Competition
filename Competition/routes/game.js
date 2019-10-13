@@ -107,7 +107,7 @@ router.get('/newGame', isLoggedIn, upload.single('img'), async(req, res, next) =
  * RESTful API: POST
  * Middlewares: isLoggedIn
  * Purpose: Create new Game
- * Last Update: 10/06/2019
+ * Last Update: 10/12/2019
  * Version: 1.0
 *****************************************************************************************************/
 /* PLZ CHANGE TO ADD A TAGS IN TO GAME */
@@ -115,6 +115,14 @@ router.post('/newGame', isLoggedIn, upload.single('img'), async(req, res, next) 
     try {
         const { title, description, rule, option, optionTwo, max, timeToDate, participateDate, tag } = req.body;
 
+        //Check time.
+        if(new Date(timeToDate) < new Date(participateDate)) {
+            req.flash('newGameError', 'Participate Date should be earlier than Date');
+            return res.redirect('/game/newGame');;
+
+        }
+
+        //Create new game
         const game = await Game.create({
             title,
             img: null,
@@ -129,14 +137,16 @@ router.post('/newGame', isLoggedIn, upload.single('img'), async(req, res, next) 
             managerId: req.user.id,
         });
 
+        //Check tag
         const exTag = await Tag.findOne({
             where: { id: tag }
         });
-
+        //There is no tag.
         if(!exTag) {
             req.flash('newGameError', 'Sorry, there is no matched tag. \n Would like to create tag?');
             return res.redirect('/game/newGame');
         }
+        //Add tag to game
         game.addTags(exTag);
 
         return res.redirect('/game/' + game.id);
@@ -249,7 +259,7 @@ router.get('/:id/participate', isLoggedIn, async(req, res, next) => {
  * RESTful API: POST
  * Middlewares: isLoggedIn
  * Purpose: 참가자 Post로 받기
- * Last Update: 10/09/2019
+ * Last Update: 10/12/2019
  * Version: 1.0
 *****************************************************************************************************/
 router.post('/:id/participate', isLoggedIn, async(req, res, next) => {
@@ -259,6 +269,25 @@ router.post('/:id/participate', isLoggedIn, async(req, res, next) => {
         //Body properties
         const { option, optionTwo } = req.body;
         //Create new Participant
+
+        const game = await Game.findOne({
+            include: [{
+                model: Participant,
+            }],
+            where: { id: gameId }
+        });
+
+        //Time is over!
+        if(new Date(game.participateDate) < new Date()) {
+            req.flash('partiError', 'Time is over!');
+            return res.redirect('/game/'+gameId+'/participate');
+        }
+
+        if(parseInt(game.max) < game.participants.length + 1) {
+            req.flash('partiError', 'Already max!');
+            return res.redirect('/game/'+gameId+'/participate');
+        }
+
         await Participant.create({
             point: 0,
             gameId,

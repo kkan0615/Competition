@@ -6,6 +6,11 @@
 <body>
     <% include ../top-nav %>
     <div class="content">
+        <div class="warning">
+            <% if ( newGameError.length > 0 ) { %>
+                <p><%= newGameError %> </p>
+            <% } %>
+        </div>
         <form method="POST" class="newGame-form" enctype="multipart/form-data">
             <h1>New Games</h1>
             <label for="title">Title</label>
@@ -118,6 +123,12 @@
     width: 100%;
     height: 40px;
 }
+
+        .warning {
+            background-color: white;
+            padding: 30px;
+            text-align: center;
+        }
     </style>
     <script>
         document.getElementsByName("timeToDate").values = new Date();

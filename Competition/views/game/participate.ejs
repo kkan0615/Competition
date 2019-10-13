@@ -6,6 +6,11 @@
 <body>
     <% include ../top-nav %>
     <div class="content">
+            <div class="warning">
+                <% if ( partiError.length > 0 ) { %>
+                    <p><%= partiError %> </p>
+                <% } %>
+            </div>
         <div class="createForm">
             <form method="POST" class="newGame-form" enctype="multipart/form-data">
                 <h1>New Games</h1>
@@ -23,6 +28,11 @@
             padding: 20px;
             margin: 20px 0 0 0;
             background-color: white;
+        }
+        .warning {
+            background-color: white;
+            padding: 30px;
+            text-align: center;
         }
     </style>
 </body>
