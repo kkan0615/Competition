@@ -15,6 +15,9 @@ db.Participant = require('./participant')(sequelize, Sequelize);
 db.Tag = require('./tag')(sequelize, Sequelize);
 db.Tournament = require('./tournament')(sequelize, Sequelize);
 db.IndividualRound = require('./individualRound')(sequelize, Sequelize);
+db.IndividualGame = require('./individualGame')(sequelize, Sequelize);
+db.News = require('./news')(sequelize, Sequelize);
+db.Chat = require('./chat')(sequelize, Sequelize);
 
 /* User 1:N game as Manager */
 db.User.hasMany(db.Game, {as: 'manager'});
@@ -28,13 +31,13 @@ db.Participant.belongsTo(db.User);
 db.Game.belongsToMany(db.Tag, {through: 'gameTag'});
 db.Tag.belongsToMany(db.Game, {through: 'gameTag'});
 
-/* Game 1:N Tournament */
-db.Game.hasMany(db.Tournament);
-db.Tournament.belongsTo(db.Game);
+/* Game 1:N IndividualRound */
+db.Game.hasMany(db.IndividualRound);
+db.IndividualRound.belongsTo(db.Game);
 
-/* Tournament 1:N individualRound */
-db.Tournament.hasMany(db.IndividualRound);
-db.IndividualRound.belongsTo(db.Tournament);
+/* IndividualRound 1:N IndividualGame */
+db.IndividualRound.hasMany(db.IndividualGame);
+db.IndividualGame.belongsTo(db.IndividualRound);
 
 /* Tournament 1:N TeamRound */
 
@@ -45,9 +48,25 @@ db.Game.hasMany(db.Participant);
 db.Participant.belongsTo(db.Game);
 
 /* Participant 1:N IndividualRound */
-db.Participant.hasMany(db.IndividualRound, {as: 'firstPlayer'});
-db.IndividualRound.belongsTo(db.Participant, {as: 'firstPlayer'});
-db.Participant.hasMany(db.IndividualRound, {as: 'secondPlayer'});
-db.IndividualRound.belongsTo(db.Participant, {as: 'secondPlayer'});
+db.Participant.hasMany(db.IndividualGame, {as: 'firstPlayer'});
+db.IndividualGame.belongsTo(db.Participant, {as: 'firstPlayer'});
+db.Participant.hasMany(db.IndividualGame, {as: 'secondPlayer'});
+db.IndividualGame.belongsTo(db.Participant, {as: 'secondPlayer'});
+
+/* User 1:N Chat */
+db.User.hasMany(db.Chat);
+db.Chat.belongsTo(db.User);
+
+/* Game 1:N Chat */
+db.Game.hasMany(db.Chat);
+db.Chat.belongsTo(db.Game);
+
+/* IndividualRound 1:N Chat */
+db.IndividualRound.hasMany(db.Chat);
+db.Chat.belongsTo(db.IndividualRound);
+
+/* game 1 : N News - 게임은 많은 뉴스를 가질 수 있다 */
+db.Game.hasMany(db.News);
+db.News.belongsTo(db.Game);
 
 module.exports = db;

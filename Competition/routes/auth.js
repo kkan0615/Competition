@@ -1,3 +1,10 @@
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
+ * Purpose: Auth router.
+ * list of API:
+ * Last Update: 10/14/2019
+ * Version: 1.0
+*****************************************************************************************************/
 const express = require('express');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');

@@ -1,19 +1,19 @@
 /****************************************************************************************************
  * Authour: Youngjin Kwak(곽영진)
- * Table name: individualRound
- * Purpose: Tourament Database
+ * Table name: news
+ * Purpose: news about game.
  * Element:
-            gameId - 1:N with Game table
+        gameId - 1:N with Game table
+        content - news 내용이 안에 들어감
  * Last Update: 10/20/2019
  * Version: 1.0
 *****************************************************************************************************/
 module.exports = (sequelize, DataTypes) => (
-    sequelize.define('individualRound', {
-        number: {
-            type: DataTypes.INTEGER(),
+    sequelize.define('news', {
+        content: {
+            type: DataTypes.STRING(),
             allowNull: false,
-
-        }
+        },
     }, {
         timestamps: true, // Create Time Stamps
         paranoid: true, // Create id

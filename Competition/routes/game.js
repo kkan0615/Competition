@@ -7,7 +7,7 @@
  *              fs - File System 내장모듈
  *              path
  *              isLoggedIn
- * Last Update: 10/08/2019
+ * Last Update: 10/20/2019
  * Version: 1.0
 *****************************************************************************************************/
 const express = require('express');
@@ -17,7 +17,7 @@ const fs = require('fs'); // File System
 const path = require('path') //Path System
 
 const { isLoggedIn } = require('./middlewares');
-const { Game, Tag, Participant, User } = require('../models/index');
+const { Game, Tag, Participant, User, Chat, IndividualRound, IndividualGame, News } = require('../models/index');
 
 /****************************************************************************************************
  * Authour: Youngjin Kwak(곽영진)
@@ -119,9 +119,7 @@ router.post('/newGame', isLoggedIn, upload.single('img'), async(req, res, next) 
         if(new Date(timeToDate) < new Date(participateDate)) {
             req.flash('newGameError', 'Participate Date should be earlier than Date');
             return res.redirect('/game/newGame');;
-
         }
-
         //Create new game
         const game = await Game.create({
             title,
@@ -168,6 +166,10 @@ router.get('/:id', async(req, res, next) => {
     try {
         //Find detail of game.
         const game = await Game.findOne({
+            include: [{
+                model: User,
+                as: 'manager',
+            }],
             where: { id: req.params.id }
         });
 
@@ -176,11 +178,19 @@ router.get('/:id', async(req, res, next) => {
             res.redirect('/game/');
         }
 
+        const chats = await Chat.findAll({
+            include: [{
+                model: User,
+            }],
+            where: { gameId: game.id }
+        });
+
         return res.render('game/game', {
             title: game.title,
             user: req.user,
             listError: req.flash('listError'),
             game,
+            chats,
         });
     } catch (error) {
         console.error(error);
@@ -239,6 +249,10 @@ router.get('/:id/participate', isLoggedIn, async(req, res, next) => {
         const gameId = req.params.id;
 
         const game = await Game.findOne({
+            include: [{
+                model: User,
+                as: 'manager'
+            }],
             where: { id: gameId }
         });
 
@@ -259,7 +273,7 @@ router.get('/:id/participate', isLoggedIn, async(req, res, next) => {
  * RESTful API: POST
  * Middlewares: isLoggedIn
  * Purpose: 참가자 Post로 받기
- * Last Update: 10/12/2019
+ * Last Update: 10/20/2019
  * Version: 1.0
 *****************************************************************************************************/
 router.post('/:id/participate', isLoggedIn, async(req, res, next) => {
@@ -288,7 +302,7 @@ router.post('/:id/participate', isLoggedIn, async(req, res, next) => {
             return res.redirect('/game/'+gameId+'/participate');
         }
 
-        await Participant.create({
+        const player = await Participant.create({
             point: 0,
             gameId,
             userId: req.user.id,
@@ -297,6 +311,236 @@ router.post('/:id/participate', isLoggedIn, async(req, res, next) => {
         });
 
         return res.redirect('/game/' + gameId);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
+ * RESTful API: GET
+ * Middlewares: isLoggedIn
+ * Purpose: Tounament table
+ * Last Update: 10/20/2019
+ * Version: 1.0
+*****************************************************************************************************/
+router.get('/:id/tournamentList', async(req, res, next) => {
+    try {
+        const gameId = req.params.id;
+
+        const game = await Game.findOne({
+            include: [{
+                model: User,
+                as: 'manager'
+            }],
+            where: { id: gameId }
+        });
+
+        const list = await IndividualRound.findAll({
+            include: [{
+                model: IndividualGame,
+                include: [{
+                    model: Participant,
+                    as: 'firstPlayer',
+                    include: {
+                        model: User,
+                    }
+                }, {
+                    model: Participant,
+                    as: 'secondPlayer',
+                    include: {
+                        model: User,
+                    }
+                }],
+                order: [
+                    ['number', 'DESC']
+                ]
+            }],
+            where: { gameId },
+            order: [
+                ['number', 'DESC']
+            ]
+        });
+
+        return res.render('game/tournament-list', {
+            title: 'tournamentList',
+            game,
+            list,
+            user: req.user
+        });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
+ * RESTful API: get
+ * Middlewares: isLoggedIn
+ * Purpose: Start game when manager pressed
+ * Last Update: 10/20/2019
+ * Version: 1.0
+*****************************************************************************************************/
+router.get('/:id/start', isLoggedIn, async(req, res, next) => {
+    try {
+        const gameId = req.params.id;
+        const game = await Game.findOne({
+            include: [{
+                model: User,
+                as: 'manager',
+            }],
+            where: { id: gameId }
+        });
+
+        /*
+         // 시간에 따른 시작 추가하기 여기다가
+         */
+
+        const players = await Participant.findAll({
+            where: { gameId }
+        });
+
+        const round = await IndividualRound.create({
+            number: 1,
+            gameId,
+        });
+        let number = 1;
+        for (let i = 0; i < players.length; i+= 2) {
+            const first = players[i];
+            const second = players[i+1];
+            if( first && second ) {
+                await IndividualGame.create({
+                    individualRoundId: round.id,
+                    number: number,
+                    firstPlayerId: first.id,
+                    firstPoint: 0,
+                    secondPlayerId: second.id,
+                    secondPoint: 0,
+                });
+            } else {
+                await IndividualGame.create({
+                    individualRoundId: round.id,
+                    number: number,
+                    firstPlayerId: first.id,
+                    firstPoint: 0,
+                    secondPlayerId: null,
+                    secondPoint: 0,
+                });
+            }
+            number++;
+        }
+        /*
+        players.forEach(async(player) => {
+            const games = await IndividualGame.findAll({
+                where: { individualRoundId: round.id }
+            });
+
+            if(!games || games.length === 0) {
+                await IndividualGame.create({
+                    individualRoundId: round.id,
+                    number: 1,
+                    firstPlayerId: player.id,
+                    firstPoint: 0,
+                    secondPlayerId: null,
+                    secondPoint: 0,
+                });
+            } else if(!games[games.length].secondPlayerId) {
+                await IndividualGame.update({
+                    secondPlayerId: player.id,
+                }, {
+                    where: { id: games[games.length].id }
+                });
+            } else {
+                await IndividualGame.create({
+                    number: games[games.length].number,
+                    individualRoundId: round.id,
+                    firstPlayerId: player.id,
+                    firstPoint: 0,
+                    secondPlayerId: null,
+                    secondPoint: 0,
+                });
+            }
+        });
+        */
+        const list = await IndividualGame.findAll({
+            where: { individualRoundId: round.id }
+        });
+        console.log('********************************************************************************************');
+        console.log(list);
+
+        await News.create({
+            content: 'Game is started! please check at tournament list',
+            gameId,
+        });
+
+        return res.redirect('/game/'+gameId+'/tournamentList')
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
+ * RESTful API: get
+ * Middlewares: isLoggedIn
+ * Purpose: Tournament detail
+ * Last Update: 10/20/2019
+ * Version: 1.0
+*****************************************************************************************************/
+router.get('/:id/:round/:number', isLoggedIn, async(req, res, next) => {
+    try {
+        const { id, round, number } = req.params;
+        const game = await Game.findOne({
+            include: [{
+                model: User,
+                as: 'manager',
+            }],
+            where: { id }
+        });
+
+        const detail = await IndividualRound.findOne({
+            include: [{
+                model: IndividualGame,
+                include: [{
+                    model: Participant,
+                    as: 'firstPlayer',
+                    include: {
+                        model: User,
+                    }
+                }, {
+                    model: Participant,
+                    as: 'secondPlayer',
+                    include: {
+                        model: User,
+                    }
+                }],
+                order: [
+                    ['number', 'DESC']
+                ],
+                where: { id: number }
+            }],
+            where: { id: round },
+            order: [
+                ['number', 'DESC']
+            ]
+        });
+
+        const chats = await Chat.findAll({
+            include: [{
+                model: User,
+            }],
+            where: { gameId: game.id }
+        });
+
+        return res.render('game/tournament-detail', {
+            title: 'tournament',
+            game,
+            detail,
+            chats,
+            user: req.user
+        });
     } catch (error) {
         console.error(error);
         next(error);

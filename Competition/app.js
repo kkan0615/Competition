@@ -14,6 +14,10 @@ const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const gameRouter = require('./routes/game');
 const tagRouter = require('./routes/tag');
+const chatRouter = require('./routes/chat');
+
+/* WebSocket */
+const WebSocket = require('./socket');
 
 const app = express();
 sequelize.sync();
@@ -43,12 +47,16 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session()); // Set passport to session.
 
+/* Set address */
 app.use('/', indexRouter); // Index page router
 app.use('/uploads', express.static('uploads'));
 app.use('/auth', authRouter); // Auth page router
 app.use('/game', gameRouter); // Game page router
 app.use('/tag', tagRouter); // Tag page router
+app.use('/chat', chatRouter);
 
 const server = app.listen(app.get('port'), () => {
     console.log(app.get('port'), 'is wating you!');
 });
+
+WebSocket(server, app, sessionMiddleware)

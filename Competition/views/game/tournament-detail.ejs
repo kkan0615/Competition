@@ -12,13 +12,6 @@
     <% include ../top-nav %>
     <div class="content">
         <div class="infomation">
-            <img src="/uploads/game/<%= game.img %>" alt="">
-            <div class="info-writeBox">
-                <h1><%= game.title %></h1>
-                <p class="info-description"><%= game.description %></p>
-                <button><a href="/game/<%= game.id %>/participate">참가하기</a></button>
-                <button><a href="/game/<%= game.id %>/start">시작하기</a></button>
-            </div>
         </div>
         <div class="menu">
             <a href="/game/<%= game.id %>">Main</a>

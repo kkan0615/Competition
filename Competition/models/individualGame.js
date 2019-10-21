@@ -3,17 +3,30 @@
  * Table name: individualRound
  * Purpose: Tourament Database
  * Element:
-            gameId - 1:N with Game table
+            individualRound - 1:N with individualRound table, round number
+            number - Number in round 라운드에서의 번호
+            firstPlayer - 1:N with user table
+            firstPoint -
+            secondPlayer - 1:N with user table
+            secondPoint -
+            winner - 1:N with user table
  * Last Update: 10/20/2019
  * Version: 1.0
 *****************************************************************************************************/
 module.exports = (sequelize, DataTypes) => (
-    sequelize.define('individualRound', {
+    sequelize.define('individualGame', {
         number: {
             type: DataTypes.INTEGER(),
             allowNull: false,
-
-        }
+        },
+        firstPoint: {
+            type: DataTypes.INTEGER(),
+            allowNull: false,
+        },
+        secondPoint: {
+            type: DataTypes.INTEGER(),
+            allowNull: false,
+        },
     }, {
         timestamps: true, // Create Time Stamps
         paranoid: true, // Create id

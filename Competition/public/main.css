@@ -188,3 +188,18 @@ body {
     width: 300px;
     height: 30px;
 }
+
+/*********************************************************************
+*   search-bar 시작
+*   Author: Youngjin Kwak
+*   10/18/2019
+**********************************************************************/
+.footer {
+    left: 0;
+    bottom: 0;
+    padding: 10px;
+    background-color: #AE85FF;
+    color: white;
+    text-align: center;
+    font-size: 20px;
+}
