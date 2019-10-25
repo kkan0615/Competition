@@ -531,7 +531,7 @@ router.get('/:id/:round/:number', isLoggedIn, async(req, res, next) => {
             include: [{
                 model: User,
             }],
-            where: { gameId: game.id }
+            where: { gameId: game.id, individualRoundId: round, individualGameId: number }
         });
 
         return res.render('game/tournament-detail', {

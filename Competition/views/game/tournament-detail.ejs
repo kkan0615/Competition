@@ -10,6 +10,7 @@
 </head>
 <body>
     <% include ../top-nav %>
+    <% console.log(detail.individualGames[0].id) %>
     <div class="content">
         <div class="infomation">
         </div>
@@ -63,7 +64,7 @@
                             <% } %>
                         </div>
                     </fieldset>
-                    <form class="chat-form" method="POST" action="/chat/game/<%= game.id %>">
+                    <form class="chat-form" method="POST" action="/chat/game/<%= game.id %>/<%= detail.id %>/<%= detail.individualGames[0].id %>">
                         <input type="text" name="chat">
                         <button type="submit">submit</button>
                     </form>
@@ -78,7 +79,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
 
-        var socket = io.connect('http://localhost:8001/game', {
+        var socket = io.connect('http://localhost:8001/IndividualGame', {
             path: '/socket.io',
         });
         socket.on('chat', function(data) {
@@ -118,7 +119,7 @@
                     console.error(xhr.responseText);
                 }
                 };
-                xhr.open('POST', '/chat/game/<%= game.id %>');
+                xhr.open('POST', '/chat/game/<%= game.id %>/<%= detail.id %>/<%= detail.individualGames[0].id %>');
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.send(JSON.stringify({ chat: this.chat.value }));
             }

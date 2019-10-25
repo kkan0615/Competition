@@ -65,6 +65,10 @@ db.Chat.belongsTo(db.Game);
 db.IndividualRound.hasMany(db.Chat);
 db.Chat.belongsTo(db.IndividualRound);
 
+/* IndividualGame 1:N Chat */
+db.IndividualGame.hasMany(db.Chat);
+db.Chat.belongsTo(db.IndividualGame);
+
 /* game 1 : N News - 게임은 많은 뉴스를 가질 수 있다 */
 db.Game.hasMany(db.News);
 db.News.belongsTo(db.Game);
