@@ -27,10 +27,11 @@
         </div>
         <div class="grid-container">
             <div class="grid-item item1">
-                1
-                <div class="newInfo">
-                    <!-- Foreach 후에 div 넣기 -->
-                </div>
+                <% news.forEach(info => { %>
+                    <div class="news">
+                        <%= info.content %>
+                    </div>
+                <% }) %>
             </div>
             <div class="grid-item item2">
                 <div class="chat-room">
@@ -172,12 +173,22 @@
             border: black 2px solid;
             grid-column: 1 / span 2;
             grid-row: 1 / 25;
+            overflow: auto;
+            height: 400px;
+        }
+
+        .news {
+            background: white;
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid #91A7FF;
         }
 
         .item2 {
             border: black 2px solid;
             grid-column: 3;
             grid-row: 1 / 50;
+            width: 600px;
         }
 
         .item3 {

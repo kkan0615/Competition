@@ -1,7 +1,7 @@
 <!--
     Author: Youngjin Kwak(Requiem)
     Last Update : 10/18/2019
-    Purpose: Main game page
+    Purpose: Main Tournament page
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -10,9 +10,28 @@
 </head>
 <body>
     <% include ../top-nav %>
-    <% console.log(detail.individualGames[0].id) %>
-    <div class="content">
-        <div class="infomation">
+        <div class="content">
+        <div class="match">
+            <div class="match-item">
+                <h4><%= detail.individualGames[0].firstPlayer.user.nickname %></h4>
+
+            </div>
+            <div class="match-item">
+                <form class="match-form" method="POST">
+                    <label for="winnerId">winnerId</label>
+                    <input type="number" name="winnerId"> <br>
+                    <label for="firstPlayerPoint">firstPlayerPoint</label>
+                    <input type="number" name="firstPlayerPoint"> <br>
+                    <label for="secondPlayerPoint">secondPlayerPoint</label>
+                    <input type="number" name="secondPlayerPoint"> <br>
+                    <button type="submit">submit</button>
+                </form>
+            </div>
+            <div class="match-item">
+                <% if(detail.individualGames[0].secondPlayer) { %>
+                <h4><%= detail.individualGames[0].secondPlayer.user.nickname %></h4>
+                <% } %>
+            </div>
         </div>
         <div class="menu">
             <a href="/game/<%= game.id %>">Main</a>
@@ -231,6 +250,20 @@
             border-radius: 5px;
             padding: 2px 5px;
             max-width: 300px;
+        }
+        .match {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            padding: 10px;
+            margin: 20px 0px 20px 0px;
+        }
+        .match-item {
+            background-color: white;
+            border: black 2px solid;
+            padding: 10px;
+            font-size: 20px;
+            text-align: center;
+            height: 300px;
         }
     </style>
 </body>

@@ -10,6 +10,7 @@
 const express = require('express');
 
 const { isNotLoggedIn } = require('./middlewares');
+const { Game } = require('../models');
 
 const router = express.Router();
 
@@ -18,15 +19,32 @@ const router = express.Router();
  * RESTful API: GET
  * Middlewares: None
  * Purpose: index page
- * Last Update: 9/29/2019
+ * Last Update: 10/25/2019
  * Version: 1.0
 *****************************************************************************************************/
-router.get('/', (req, res, next) => {
-    return res.render('index', {
-        title: 'Hello World',
-        user: req.user,
-        indexError: req.flash('indexError'),
-    });
+router.get('/', async(req, res, next) => {
+    try {
+        const newGames = await Game.findAll({
+
+        });
+
+        const upcomingGames = await Game.findAll({
+            order: [
+                ['participateDate', 'DESC']
+            ]
+        });
+
+        return res.render('index', {
+            title: 'Hello World',
+            user: req.user,
+            indexError: req.flash('indexError'),
+            newGames,
+            upcomingGames,
+        });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
 });
 
 /****************************************************************************************************

@@ -2,12 +2,16 @@
  * Authour: Youngjin Kwak(곽영진)
  * Purpose: Auth router.
  * list of API:
- * Last Update: 10/14/2019
+ * Last Update: 10/29/2019
  * Version: 1.0
 *****************************************************************************************************/
 const express = require('express');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const { User } = require('../models');
 
@@ -15,27 +19,60 @@ const router = express.Router();
 
 /****************************************************************************************************
  * Authour: Youngjin Kwak(곽영진)
+ * Purpose: Check game folder in uploads direct
+ * Functions: mkdirSync - 비동기 동기 make directory.
+ * Last Update: 10/25/2019
+ * Version: 1.0
+*****************************************************************************************************/
+fs.readdir('uploads/profile', (error) => {
+    if (error) {
+        console.error('Profile directory in uploads is not existed');
+        fs.mkdirSync('uploads/profile');
+    }
+});
+
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
+ * Purpose:
+ * Functions:
+ * Last Update: 10/25/2019
+ * Version: 1.0
+*****************************************************************************************************/
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, 'uploads/profile'); // cb = call back
+        },
+        filename: (req, file, cb) => {
+            cb(null, new Date().valueOf() + path.extname(file.originalname));
+        }
+    })
+})
+
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
  * RESTful API: POST
  * Middlewares: 후에 multer을 추가해 주세요.
  * Purpose: Create the User to Database
- * Last Update: 10/02/2019
+ * Last Update: 10/29/2019
  * Version: 1.0
 *****************************************************************************************************/
-router.post('/join', isNotLoggedIn, async(req, res, next) => {
-    const { email, password, img, nickname } = req.body;
+router.post('/join', isNotLoggedIn, upload.single('img'), async(req, res, next) => {
+    const { email, password, nickname, username } = req.body;
     try {
-        const exUser = await User.findOne({ where: { email } });
+        const exUser = await User.findOne({ where: { username } });
         if(exUser) {
-            req.flash('joinError', 'This email has been registered');
-            return res.redirect('/join/userJoin');
+            req.flash('joinError', 'This username has been registered');
+            return res.redirect('/auth/join');
         }
         const bash = await bcrypt.hash(password, 12);
 
         await User.create({
+            username,
             email,
             nickname,
             password: bash,
-            img: null,
+            img: req.file.filename,
         });
 
         return res.redirect('/');

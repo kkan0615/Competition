@@ -9,13 +9,16 @@
         <% } %>
         <%= %>
         <div class="join">
-            <form method="POST" action="/auth/join">
+            <form method="POST" action="/auth/join" enctype="multipart/form-data">
+                <label for="username">Username</label>
+                <input type="text" name="username"><br>
                 <label for="email">email</label>
                 <input type="email" name="email"><br>
                 <label for="nickname">Nickname</label>
                 <input type="text" name="nickname">
                 <label for="password">Password</label>
                 <input type="password" name="password"><br>
+                <input type="file" id="img" name="img">
                 <button type="submit">submit</button>
                 <button type="reset">rest</button>
             </form>

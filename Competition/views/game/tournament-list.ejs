@@ -17,16 +17,20 @@
             <a href="/game/<%= game.id %>/pList">List</a>
             <a href="/game/<%= game.id %>/tournamentList">Tounament</a>
         </div>
-        <div class="tounament">
+        <div class="tournament">
             <% list.forEach(round => { %>
-                <ul class="round round-<%= round.id %>">
+                <ul class="round round-<%= round.number %>">
                     <% round.individualGames.forEach(gamea => { %>
                         <li class="spacer">&nbsp;</li>
-                        <div class="touch" onclick="moveToDetail(<%= round.id %>, <%= gamea.id %>)">
+                        <div class="touch" onclick="moveToDetail(<%= round.number %>, <%= gamea.number %>)">
                             <% if(gamea.firstPoint > gamea.secondPoint) { %>
                                 <li class="game game-top winner"><%= gamea.firstPlayer.user.nickname %> <span><%= gamea.firstPoint %></span></li>
                                 <li class="game game-spacer">&nbsp;</li>
-                                <li class="game game-bottom "><%= gamea.secondPlayer.user.nickname %> <span><%= gamea.secondPoint %></span></li>
+                                <% if(!gamea.secondPlayer) { %>
+                                    <li class="game game-bottom ">No name <span>0</span></li>
+                                <% } else { %>
+                                    <li class="game game-bottom "><%= gamea.secondPlayer.user.nickname %> <span><%= gamea.secondPoint %></span></li>
+                                <% } %>
                             <% } else if(gamea.firstPoint < gamea.secondPoint) { %>
                                 <li class="game game-top"><%= gamea.firstPlayer.user.nickname %> <span><%= gamea.firstPoint %></span></li>
                                 <li class="game game-spacer">&nbsp;</li>
@@ -38,12 +42,12 @@
                                 <li class="game game-bottom"><%= gamea.secondPlayer.user.nickname %> <span><%= gamea.secondPoint %></span></li>
                                 <% } %>
                             <% } %>
-                        </div>
+                        </div> <!-- touch class END -->
                     <% }) %>
-                </ul>
+                </ul> <!-- round round-number END -->
             <% }); %>
         </div>
-        <!--
+
         <div class="tournament">
             <ul class="round round-1">
                 <li class="spacer">&nbsp;</li>
@@ -148,7 +152,7 @@
                 <li class="spacer">&nbsp;</li>
             </ul>
         </div>
-        -->
+
     </div> <!-- Content end -->
     <% include ../footer %>
     <script>

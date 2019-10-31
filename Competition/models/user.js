@@ -13,11 +13,16 @@
  *          provider - SNS Login
  *          snsId
  *          img - Main profile image
- * Last Update: 10/02/2019
+ * Last Update: 10/29/2019
  * Version: 1.0
 *****************************************************************************************************/
 module.exports = (sequelize, DataTypes) => (
     sequelize.define('user', {
+        username: {
+            type: DataTypes.STRING(30),
+            allowNull: false,
+            unique: true,
+        },
         email: {
             type: DataTypes.STRING(40),
             allowNull: false,

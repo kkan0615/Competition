@@ -2,7 +2,7 @@
  * Authour: Youngjin Kwak(곽영진)
  * Purpose: Socket Manager javascript file
  * list of API:
- * Last Update: 10/21/2019
+ * Last Update: 10/25/2019
  * Version: 1.0
 *****************************************************************************************************/
 const SocketIO = require('socket.io'); // npm i socket.io
@@ -11,10 +11,14 @@ const axios = require('axios'); // npm i axios
 /****************************************************************************************************
  * Authour: Youngjin Kwak(곽영진)
  * Purpose: Check tag folder in uploads directory
+ * parameter : sever - app.listen()
+ *             app - app.js - express()
+ *             sessionMiddleware - Session from app.js
  * Functions: Create Soket io
- * Last Update: 10/21/2019
+ * Last Update: 10/25/2019
  * Version: 1.0
 *****************************************************************************************************/
+
 module.exports = (server, app, sessionMiddleware) => {
     const io = SocketIO(server, { path: '/socket.io' });
 
@@ -65,3 +69,16 @@ module.exports = (server, app, sessionMiddleware) => {
         });
     });
 };
+
+/* 사용법 예시
+ * router에
+ * req.app.get('io').of('/IndividualGame').to(individualGame.id).emit('chat', chat);
+ * 로 사용
+ * 'chat'이라는 이름으로 클라이언트로 던진다.
+ * -client-
+ * <script src="/socket.io/socket.io.js"></script>
+ * var socket = io.connect('http://localhost:8001/IndividualGame', {
+            path: '/socket.io',
+        });
+        socket.on('chat', function(data) {});
+ */

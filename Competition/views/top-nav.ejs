@@ -9,7 +9,7 @@
         <% if(user && user.id) { %>
         <div class="dropdown">
             <button class="dropbtn">
-                <%= user.nickname %>
+                <img src="/uploads/profile/<%= user.img %>" alt=""><%= user.nickname %>
             </button>
             <div class="dropdown-content">
                 <a href="#">Profile</a>

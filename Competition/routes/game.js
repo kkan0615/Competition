@@ -1,13 +1,14 @@
 /****************************************************************************************************
  * Authour: Youngjin Kwak(곽영진)
  * Purpose: game router.
+ * Router keyword : /game
  * list of API:
  *              Express
  *              multer - Upload files to specific directory
  *              fs - File System 내장모듈
  *              path
  *              isLoggedIn
- * Last Update: 10/20/2019
+ * Last Update: 10/25/2019
  * Version: 1.0
 *****************************************************************************************************/
 const express = require('express');
@@ -16,6 +17,7 @@ const multer = require('multer');
 const fs = require('fs'); // File System
 const path = require('path') //Path System
 
+//From project
 const { isLoggedIn } = require('./middlewares');
 const { Game, Tag, Participant, User, Chat, IndividualRound, IndividualGame, News } = require('../models/index');
 
@@ -49,7 +51,7 @@ const upload = multer({
             cb(null, new Date().valueOf() + path.extname(file.originalname));
         }
     })
-})
+});
 
 /****************************************************************************************************
  * Authour: Youngjin Kwak(곽영진)
@@ -185,12 +187,17 @@ router.get('/:id', async(req, res, next) => {
             where: { gameId: game.id }
         });
 
+        const news = await News.findAll({
+            where: { gameId: game.id }
+        });
+
         return res.render('game/game', {
             title: game.title,
             user: req.user,
             listError: req.flash('listError'),
             game,
             chats,
+            news,
         });
     } catch (error) {
         console.error(error);
@@ -316,12 +323,49 @@ router.post('/:id/participate', isLoggedIn, async(req, res, next) => {
         next(error);
     }
 });
+
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
+ * RESTful API: POST
+ * Middlewares: isLoggedIn
+ * Purpose: 참가자 POST 거부
+ * Last Update: 10/20/2019
+ * Version: 1.0
+*****************************************************************************************************/
+router.post('/:id/participate/delete', isLoggedIn, async(req, res, next) => {
+    try {
+        //Game Id from parameter
+        const gameId = req.params.id;
+        //Body properties
+        const { userId } = req.body;
+        //Create new Participant
+
+        const game = await Game.findOne({
+            where: { id: gameId }
+        });
+
+        if(game.managerId != req.user.id){
+            req.flash('plistError', 'Only Manager is allowed to delete');
+            return res.redirect('/game/'+gameId+'/pList');
+        }
+
+        const player = await Participant.destroy({
+            where: { id: userId }
+        });
+
+        return res.json({result: 'good' });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
 /****************************************************************************************************
  * Authour: Youngjin Kwak(곽영진)
  * RESTful API: GET
  * Middlewares: isLoggedIn
  * Purpose: Tounament table
- * Last Update: 10/20/2019
+ * Last Update: 10/25/2019
  * Version: 1.0
 *****************************************************************************************************/
 router.get('/:id/tournamentList', async(req, res, next) => {
@@ -353,12 +397,10 @@ router.get('/:id/tournamentList', async(req, res, next) => {
                     }
                 }],
                 order: [
-                    ['number', 'DESC']
                 ]
             }],
             where: { gameId },
             order: [
-                ['number', 'DESC']
             ]
         });
 
@@ -491,6 +533,7 @@ router.get('/:id/start', isLoggedIn, async(req, res, next) => {
 *****************************************************************************************************/
 router.get('/:id/:round/:number', isLoggedIn, async(req, res, next) => {
     try {
+        // Parameter variables
         const { id, round, number } = req.params;
         const game = await Game.findOne({
             include: [{
@@ -500,6 +543,7 @@ router.get('/:id/:round/:number', isLoggedIn, async(req, res, next) => {
             where: { id }
         });
 
+        // Individual Game detail
         const detail = await IndividualRound.findOne({
             include: [{
                 model: IndividualGame,
@@ -519,14 +563,15 @@ router.get('/:id/:round/:number', isLoggedIn, async(req, res, next) => {
                 order: [
                     ['number', 'DESC']
                 ],
-                where: { id: number }
+                where: { number }
             }],
-            where: { id: round },
+            where: { number: round, gameId: game.id },
             order: [
                 ['number', 'DESC']
             ]
         });
 
+        // Chating history
         const chats = await Chat.findAll({
             include: [{
                 model: User,
@@ -547,4 +592,90 @@ router.get('/:id/:round/:number', isLoggedIn, async(req, res, next) => {
     }
 });
 
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
+ * RESTful API: post
+ * Middlewares: isLoggedIn
+ * Purpose: Tournament 승자 가리기
+ * Last Update: 10/25/2019
+ * Version: 1.0
+*****************************************************************************************************/
+router.post('/:id/:round/:number', isLoggedIn, async(req, res, next) => {
+    try {
+        // Parameter variables.
+        const { id, round, number } = req.params;
+        // Data from body.
+        const { winnerId, firstPlayerPoint, secondPlayerPoint } = req.body;
+        //Game find
+        const game = await Game.findOne({
+            include: [{
+                model: User,
+                as: 'manager',
+            }],
+            where: { id }
+        });
+
+        const exIndividualRound = await IndividualRound.findOne({
+            where: { gameId: game.id, number: round }
+        });
+
+        //Update result of this game
+        await IndividualGame.update({
+            firstPoint : firstPlayerPoint,
+            secondPlayerPoint: secondPlayerPoint,
+        }, {
+            where: { individualRoundId: exIndividualRound.id, number }
+        });
+
+        let newNum; // New Number for individualGame
+        if (parseInt(number) % 2 == 1) {
+            //odd 홀수
+            newNum = parseInt(number) / 2 + 1;
+        } else {
+            //even 짝수
+            newNum = parseInt(number) / 2;
+        }
+        console.log('******************************************************************************************');
+
+        console.log('number: ' + parseInt(number) + ' newNum: ' + newNum);
+
+        //Check ex individual game
+        const exIndividualGame = await IndividualGame.findOne({
+            where: { individualRoundId: parseInt(round) + 1, number: parseInt(newNum) }
+        });
+
+        console.log(exIndividualGame);
+
+        if(!exIndividualGame) {
+            // Game이 존재하지 않는다.
+            const newIndividualRound = await IndividualRound.create({
+                number: parseInt(round) + 1,
+                gameId: game.id,
+            });
+
+            //Create new individualGame
+            await IndividualGame.create({
+                number: parseInt(newNum),
+                firstPlayerId: req.user.id,
+                firstPoint: 0,
+                secondPoint: 0,
+                secondPlayerId: null,
+                individualRoundId: newIndividualRound.id,
+            });
+        } else {
+            // Game이 존재할때
+            //Update ex individualGame
+            await IndividualGame.update({
+                secondPlayerId: req.user.id,
+            }, {
+                where: { individualRoundId: parseInt(round) + 1, newNum: parseInt(newNum) }
+            });
+        }
+
+        return res.redirect('/game/'+game.id + '/tournamentList');
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
 module.exports = router;

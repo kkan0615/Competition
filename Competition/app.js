@@ -4,6 +4,9 @@ const morgan = require('morgan');
 const path = require('path');
 const session = require('express-session');
 const flash = require('connect-flash');
+const RedisStore = require('connect-redis')(session);
+const helmet = require('helmet');
+const hpp = require('hpp');
 const { sequelize } = require('./models');
 const passport = require('passport');
 const passportConfig = require('./passport');
@@ -25,9 +28,6 @@ passportConfig(passport);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.set('port', process.env.PORT || 8001);
-
-app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -36,10 +36,26 @@ const sessionMiddleware = session({
     saveUninitialized: false,
     secret: process.env.COOKIE_SECRET,
     cookie: {
-      httpOnly: true,
-      secure: false,
+        httpOnly: true,
+        secure: false,
     },
+    /*
+    **** Open this when you want to use redis ****
+    store:new RedisStore({
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT,
+        pass:process.env.REDIS_PASSWORD,
+    }),
+    */
 });
+if(process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined'));
+  app.use(helmet());
+  app.use(hpp());
+  sessionMiddleware.proxy = true;
+} else {
+  app.use(morgan('dev'));
+}
 app.set('port', process.env.PORT || 8001);
 app.use(express.static(path.join(__dirname, 'public'))); // Most of css, js files will be in public directory.
 app.use(sessionMiddleware);

@@ -5,11 +5,12 @@ const { User } = require('../models');
 
 module.exports = (passport) => {
     passport.use(new LocalStrategy ({
-        usernameField: 'email',
+        usernameField: 'username',
+        //usernameField: 'email', // async의 useranme-> email, where email로 변경
         passwordField: 'password',
-    }, async (email, password, done) => {
+    }, async (username, password, done) => {
         try {
-            const exUser = await User.findOne({ where: { email } });
+            const exUser = await User.findOne({ where: { username } });
             if (exUser) {
                 const result = await bcrypt.compare(password, exUser.password);
                 if (result) {

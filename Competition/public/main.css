@@ -23,7 +23,6 @@ body {
 .topnav a:hover {
     background-color: #91A7FF;
     color: #f2f2f2;
-    transition-duration: .15s;
     border-bottom: black 4px solid;
 }
 
@@ -34,6 +33,14 @@ body {
 .dropdown {
     float: left;
     overflow: hidden;
+}
+
+.dropdown img {
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    text-align: center;
+    margin-right: 10px;
 }
 
 .dropdown .dropbtn {

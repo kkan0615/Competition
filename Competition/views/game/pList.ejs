@@ -17,10 +17,10 @@
                     <% game.participants.forEach(participant => { %>
                         <div class="column">
                             <div class="card">
-                                <img src="/uploads/user/<%= %>" alt="">
+                                <img src="/uploads/profile/<%= participant.user.img %>" alt="">
                                 <%= participant.user.nickname %>
                                 <% if(user && user.id ) { %>
-                                    <button>삭제</button>
+                                    <button onclick="deleteParticipate(<%= participant.id %>)">삭제</button>
                                 <% } %>
                             </div>
                         </div>
@@ -83,8 +83,8 @@
         .card img {
             float: left;
             border-radius: 20px;
-            width: 70px;
-            height: 70px;
+            width: 30px;
+            height: 30px;
         }
 
         .card a {
@@ -100,6 +100,25 @@
         }
     </style>
     <script>
+        function deleteParticipate(userId) {
+            <% if(user && user.id) { %>
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function() {
+                    if(xhr.status === 200) {
+                        var result = JSON.parse(xhr.responseText).result;
+                        alert(result);
+                        location.reload();
+                    } else {
+                        console.error(xhr.responseText);
+                    }
+                };
+                xhr.open('POST','/game/<%= game.id %>/participate/delete');
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify({ userId: userId }));
+            <% } else { %>
+                alert('You should login');
+            <% } %>
+        }
     </script>
 </body>
 </html>
