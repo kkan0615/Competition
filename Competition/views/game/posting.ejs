@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../layout %>
+</head>
+<body>
+    <% include ../top-nav %>
+    <div class="content">
+        <div class="warning">
+            <% if ( postingError.length > 0 ) { %>
+                <p><%= postingError %> </p>
+            <% } %>
+        </div>
+        <form method="POST" action="/game/<%= game.id %>/posting">
+            <label for="content">Content</label>
+            <input type="text" name="content"><br>
+            <button type="submit">submit</button>
+            <button type="reset">rest</button>
+        </form>
+        <% news.forEach(info => { %>
+            <div class="news">
+                <%= info.content %>
+            </div>
+        <% }) %>
+        <% posts.forEach(post => { %>
+            <div class="posts">
+                <div class="user-posts">
+                    <%= post.user.nickname %>
+                </div>
+                <%= post.content %>
+            </div>
+        <% }) %>
+    </div>
+    <style>
+    </style>
+    <script>
+        document.getElementsByName("timeToDate").values = new Date();
+        document.getElementsByName("participateDate").values = new Date();
+    </script>
+</body>
+</html>

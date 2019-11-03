@@ -18,6 +18,7 @@ db.IndividualRound = require('./individualRound')(sequelize, Sequelize);
 db.IndividualGame = require('./individualGame')(sequelize, Sequelize);
 db.News = require('./news')(sequelize, Sequelize);
 db.Chat = require('./chat')(sequelize, Sequelize);
+db.Post = require('./posting')(sequelize, Sequelize);
 
 /* User 1:N game as Manager */
 db.User.hasMany(db.Game, {as: 'manager'});
@@ -72,5 +73,13 @@ db.Chat.belongsTo(db.IndividualGame);
 /* game 1 : N News - 게임은 많은 뉴스를 가질 수 있다 */
 db.Game.hasMany(db.News);
 db.News.belongsTo(db.Game);
+
+/* game 1 : N News - 게임은 많은 뉴스를 가질 수 있다 */
+db.Game.hasMany(db.Post);
+db.Post.belongsTo(db.Game);
+
+/* game 1 : N News - 게임은 많은 뉴스를 가질 수 있다 */
+db.User.hasMany(db.Post);
+db.Post.belongsTo(db.User);
 
 module.exports = db;

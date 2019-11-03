@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const path = require('path');
 const session = require('express-session');
 const flash = require('connect-flash');
-const RedisStore = require('connect-redis')(session);
+const RedisStore = require('connect-redis')(session); // Redis https://www.npmjs.com/package/redis-connection
 const helmet = require('helmet');
 const hpp = require('hpp');
 const { sequelize } = require('./models');
@@ -44,17 +44,17 @@ const sessionMiddleware = session({
     store:new RedisStore({
         host: process.env.REDIS_HOST,
         port: process.env.REDIS_PORT,
-        pass:process.env.REDIS_PASSWORD,
+        pass: process.env.REDIS_PASSWORD,
     }),
     */
 });
 if(process.env.NODE_ENV === 'production') {
-  app.use(morgan('combined'));
-  app.use(helmet());
-  app.use(hpp());
-  sessionMiddleware.proxy = true;
+    app.use(morgan('combined'));
+    app.use(helmet());
+    app.use(hpp());
+    sessionMiddleware.proxy = true;
 } else {
-  app.use(morgan('dev'));
+    app.use(morgan('dev'));
 }
 app.set('port', process.env.PORT || 8001);
 app.use(express.static(path.join(__dirname, 'public'))); // Most of css, js files will be in public directory.

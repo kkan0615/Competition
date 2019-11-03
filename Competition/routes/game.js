@@ -8,7 +8,8 @@
  *              fs - File System 내장모듈
  *              path
  *              isLoggedIn
- * Last Update: 10/25/2019
+ * StartedAt: 10/02/2019
+ * Last Update: 11/02/2019
  * Version: 1.0
 *****************************************************************************************************/
 const express = require('express');
@@ -19,7 +20,7 @@ const path = require('path') //Path System
 
 //From project
 const { isLoggedIn } = require('./middlewares');
-const { Game, Tag, Participant, User, Chat, IndividualRound, IndividualGame, News } = require('../models/index');
+const { Game, Tag, Participant, User, Chat, IndividualRound, IndividualGame, News, Post } = require('../models/index');
 
 /****************************************************************************************************
  * Authour: Youngjin Kwak(곽영진)
@@ -199,6 +200,87 @@ router.get('/:id', async(req, res, next) => {
             chats,
             news,
         });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
+ * RESTful API: GET
+ * Middlewares: isLoggedIn
+ * Purpose: Post the post
+ * Last Update: 11/02/2019
+ * Version: 1.0
+*****************************************************************************************************/
+router.get('/:id/posting', async(req, res, next) => {
+    try {
+        const game = await Game.findOne({
+            include: [{
+                model: User,
+                as: 'manager'
+            }],
+            where: { id: req.params.id }
+        });
+
+        const posts = await Post.findAll({
+            include: {
+                model: User,
+            },
+            where: { gameId: game.id }
+        });
+
+        const news = await News.findAll({
+            where: { gameId: game.id }
+        });
+
+        return res.render('game/posting', {
+            title: 'Posting',
+            user: req.user,
+            postingError: req.flash('postingError'),
+            game,
+            posts,
+            news,
+        });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+/****************************************************************************************************
+ * Authour: Youngjin Kwak(곽영진)
+ * RESTful API: POST
+ * Middlewares: isLoggedIn
+ * Purpose: Post the post
+ * Last Update: 11/02/2019
+ * Version: 1.0
+*****************************************************************************************************/
+router.post('/:id/posting', async(req, res, next) => {
+    try {
+        //Elements from body
+        const { content } = req.body;
+
+        console.log(req.body);
+
+        //Game
+        const game = await Game.findOne({
+            include: [{
+                model: User,
+                as: 'manager'
+            }],
+            where: { id: req.params.id }
+        });
+
+        //Created Post
+        const post = await Post.create({
+            userId: req.user.id,
+            gameId: game.id,
+            content: content,
+        });
+
+        return res.redirect('/game/' + game.id);
     } catch (error) {
         console.error(error);
         next(error);
